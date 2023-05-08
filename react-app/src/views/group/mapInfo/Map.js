@@ -75,10 +75,13 @@ function Map() {
               resolve(place.position);
             } else {
               geocoder.geocode({ address: place.name }, (results, status) => {
-                if (status === "OK") {
+                if (status === "OK" ) {
                   const { lat, lng } = results[0].geometry.location;
                   const newPosition = { lat: lat(), lng: lng() };
                   resolve(newPosition);
+                } else if (status === "ZERO_RESULTS" ) {
+                  // console.log('??')
+                  resolve();
                 } else {
                   console.error(
                     "Geocode was not successful for the following reason: " +

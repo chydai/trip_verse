@@ -78,9 +78,10 @@ const PreCard = () => {
 
   useEffect(() => {
     if (allPlans.length) {
+      console.log('?')
       setCurPlan(allPlans[0]._id);
     }
-  }, [allPlans, dispatch]);
+  }, [allPlans.length, dispatch]);
 
   useEffect(() => {
     if (curPlan) {
