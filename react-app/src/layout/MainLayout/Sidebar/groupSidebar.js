@@ -1,32 +1,33 @@
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
 // material-ui
-import { useTheme } from '@mui/material/styles';
-import { Box, Drawer, useMediaQuery } from '@mui/material';
+import { useTheme } from "@mui/material/styles";
+import { Box, Drawer, useMediaQuery } from "@mui/material";
 
 // third-party
-import PerfectScrollbar from 'react-perfect-scrollbar';
-import { BrowserView, MobileView } from 'react-device-detect';
+import PerfectScrollbar from "react-perfect-scrollbar";
+import { BrowserView, MobileView } from "react-device-detect";
 
 // project imports
-import MenuList from './MenuList/groupML';
-import LogoSection from '../LogoSection';
-import { drawerWidth } from 'store/constant';
-import MenuCard from './MenuCard';
-import SearchChannel from './MenuCard/SearchChannel';
+import MenuList from "./MenuList/groupML";
+import LogoSection from "../LogoSection";
+import { drawerWidth } from "store/constant";
+import MenuCard from "./MenuCard";
+import SearchChannel from "./MenuCard/SearchChannel";
 
 // ==============================|| SIDEBAR DRAWER ||============================== //
 
 const Sidebar = ({ drawerOpen, drawerToggle, window }) => {
   const theme = useTheme();
-  const matchUpMd = useMediaQuery(theme.breakpoints.up('md'));
+  const matchUpMd = useMediaQuery(theme.breakpoints.up("md"));
 
   const drawer = (
     <>
       <Box
-        data-testid='sidebar-box'
-        sx={{ display: { xs: 'block', md: 'none' } }}>
-        <Box sx={{ display: 'flex', p: 2, mx: 'auto' }}>
+        data-testid="sidebar-box"
+        sx={{ display: { xs: "block", md: "none" } }}
+      >
+        <Box sx={{ display: "flex", p: 2, mx: "auto" }}>
           <LogoSection />
         </Box>
       </Box>
@@ -34,15 +35,14 @@ const Sidebar = ({ drawerOpen, drawerToggle, window }) => {
         <PerfectScrollbar
           component="div"
           style={{
-            height: !matchUpMd ? 'calc(100vh - 56px)' : 'calc(100vh - 88px)',
-            paddingLeft: '16px',
-            paddingRight: '16px'
+            height: !matchUpMd ? "calc(100vh - 56px)" : "calc(100vh - 88px)",
+            paddingLeft: "16px",
+            paddingRight: "16px",
           }}
         >
           <MenuList />
           <MenuCard />
           <SearchChannel />
-
         </PerfectScrollbar>
       </BrowserView>
       <MobileView>
@@ -55,26 +55,31 @@ const Sidebar = ({ drawerOpen, drawerToggle, window }) => {
     </>
   );
 
-  const container = window !== undefined ? () => window.document.body : undefined;
+  const container =
+    window !== undefined ? () => window.document.body : undefined;
 
   return (
-    <Box component="nav" sx={{ flexShrink: { md: 0 }, width: matchUpMd ? drawerWidth : 'auto' }} aria-label="mailbox folders">
+    <Box
+      component="nav"
+      sx={{ flexShrink: { md: 0 }, width: matchUpMd ? drawerWidth : "auto" }}
+      aria-label="mailbox folders"
+    >
       <Drawer
         container={container}
-        variant={matchUpMd ? 'persistent' : 'temporary'}
+        variant={matchUpMd ? "persistent" : "temporary"}
         anchor="left"
         open={drawerOpen}
         onClose={drawerToggle}
         sx={{
-          '& .MuiDrawer-paper': {
+          "& .MuiDrawer-paper": {
             width: drawerWidth,
             background: theme.palette.background.default,
             color: theme.palette.text.primary,
-            borderRight: 'none',
-            [theme.breakpoints.up('md')]: {
-              top: '88px'
-            }
-          }
+            borderRight: "none",
+            [theme.breakpoints.up("md")]: {
+              top: "88px",
+            },
+          },
         }}
         ModalProps={{ keepMounted: true }}
         color="inherit"
@@ -88,7 +93,7 @@ const Sidebar = ({ drawerOpen, drawerToggle, window }) => {
 Sidebar.propTypes = {
   drawerOpen: PropTypes.bool,
   drawerToggle: PropTypes.func,
-  window: PropTypes.object
+  window: PropTypes.object,
 };
 
 export default Sidebar;

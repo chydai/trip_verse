@@ -1,6 +1,4 @@
 import { useState } from "react";
-import CardMedia from "@mui/material/CardMedia";
-import { set } from "firebase/database";
 
 const slideStyles = {
   width: "100%",
@@ -72,7 +70,6 @@ const ImageSlider = ({ slides }) => {
   };
   const goToSlide = (slideIndex) => {
     setCurrentIndex(slideIndex);
-    console.log("goToSlide", slides);
   };
   const slideStylesWidthBackground = {
     ...slideStyles,
@@ -108,7 +105,6 @@ const ImageSlider = ({ slides }) => {
             onClick={() => goToSlide(slideIndex)}
           >
             {slideIndex === currentIndex ? "●" : "○"}
-            {/* {console.log("slideStylesWidthBackground", slides[currentIndex])} */}
           </div>
         ))}
       </div>

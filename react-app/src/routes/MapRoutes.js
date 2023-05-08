@@ -1,15 +1,13 @@
-import { lazy } from 'react';
+import { lazy } from "react";
 
 // project imports
-import Loadable from 'ui-component/Loadable';
-import MainLayout from 'layout/MainLayout';
+import Loadable from "ui-component/Loadable";
 
-const MapInfo = Loadable(lazy(() => import('views/group/mapInfo')));
-
+const MapInfo = Loadable(lazy(() => import("views/group/mapInfo")));
 
 const MapRoutes = {
-  path: '/',
-  element: <MapInfo/>,
+  path: "/",
+  element: <MapInfo />,
 };
 
 export default MapRoutes;

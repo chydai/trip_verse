@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import { forwardRef, useEffect, useState, useMemo } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 // material-ui
@@ -38,7 +38,6 @@ const NavChannel = ({ item, level }) => {
   const [open, setOpen] = useState(false);
 
   // UseState for the channel name
-  const [userId, setUserId] = useState("");
   const user = useSelector((store) => store.users);
   const channelList = useSelector((state) => state.channels.channelList);
   const curChannel = channelList.find((cur) => cur._id === item.id);

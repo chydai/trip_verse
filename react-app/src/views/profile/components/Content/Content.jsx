@@ -1,12 +1,11 @@
-import { Box, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react'
+import { Box, Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/react";
 
-import AccountSettings from './AccountSettings'
-import Notifications from './Notifications'
-import MyFollower from './MyFollower'
-import MyFollowing from './MyFollowing'
+import AccountSettings from "./AccountSettings";
+import MyFollower from "./MyFollower";
+import MyFollowing from "./MyFollowing";
 
 const Content = () => {
-  const tabs = ['Account Settings', 'My Follower', 'My Following']
+  const tabs = ["Account Settings", "My Follower", "My Following"];
 
   return (
     <Box
@@ -20,11 +19,11 @@ const Content = () => {
       rounded="md"
       borderWidth={1}
       borderColor="gray.200"
-      style={{ transform: 'translateY(-100px)' }}
+      style={{ transform: "translateY(-100px)" }}
     >
       <Tabs>
         <TabList px={5}>
-          {tabs.map(tab => (
+          {tabs.map((tab) => (
             <Tab
               key={tab}
               mx={3}
@@ -33,8 +32,8 @@ const Content = () => {
               fontWeight="semibold"
               color="brand.cadet"
               borderBottomWidth={1}
-              _active={{ bg: 'transparent' }}
-              _selected={{ color: 'brand.dark', borderColor: 'brand.blue' }}
+              _active={{ bg: "transparent" }}
+              _selected={{ color: "brand.dark", borderColor: "brand.blue" }}
             >
               {tab}
             </Tab>
@@ -53,10 +52,8 @@ const Content = () => {
           </TabPanel>
         </TabPanels>
       </Tabs>
-
-     
     </Box>
-  )
-}
+  );
+};
 
-export default Content
+export default Content;

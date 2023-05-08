@@ -1,7 +1,3 @@
-
-
-
-
 .details-body {
   padding-top: 0rem;
   border-radius: 20px;
@@ -32,16 +28,15 @@ ul.details li {
 }
 
 ul.details li:nth-child(even) {
-  background-color: #f0ecfc;;
-  
+  background-color: #f0ecfc;
 }
 
 ul.details li:nth-child(odd) {
-  background-color:  #d1c2e9;
+  background-color: #d1c2e9;
   color: #ffffff;
 }
 
-button[type=Gbutton] {
+button[type="Gbutton"] {
   width: 30%;
   background-color: #9a86f3;
   color: #ffffff;
@@ -53,7 +48,6 @@ button[type=Gbutton] {
   font-family: "Times New Roman";
   font-size: 15px;
   font-weight: bold;
-
 }
 
 @media screen and (min-width: 768px) {
@@ -72,5 +66,4 @@ button[type=Gbutton] {
   .details-header {
     gap: 10%;
   }
-
 }

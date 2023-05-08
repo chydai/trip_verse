@@ -1,29 +1,8 @@
-import { useState } from "react";
-import {
-  Box,
-  Card,
-  CardContent,
-  CardActions,
-  Typography,
-  IconButton,
-  TextField,
-  CardHeader,
-  CardMedia,
-} from "@mui/material";
-import { Edit as EditIcon, Cancel as CancelIcon } from "@mui/icons-material";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import DeleteIcon from "@mui/icons-material/Delete";
+import { Box, Card, CardContent, Typography, CardMedia } from "@mui/material";
 import { useTheme } from "@emotion/react";
-import { useDispatch } from "react-redux";
 
 function TripCard(props) {
   const theme = useTheme();
-  const [name, setName] = useState(props.name);
-  const [note, setNote] = useState(props.note);
-  const [startTime, setStartTime] = useState(props.startTime);
-  const [endTime, setEndTime] = useState(props.endTime);
-  const [imgUrl, setImgUrl] = useState(props.imgUrl);
-  const dispatch = useDispatch();
 
   return (
     <Card
@@ -41,14 +20,14 @@ function TripCard(props) {
         <Box sx={{ flexGrow: "1.5" }}>
           <CardContent sx={{}}>
             <Typography component="div" variant="h5">
-              {name}
+              {props.name}
             </Typography>
             <Typography
               variant="subtitle1"
               color="text.secondary"
               component="div"
             >
-              {note}
+              {props.note}
             </Typography>
           </CardContent>
           <Box
@@ -58,8 +37,11 @@ function TripCard(props) {
         <CardMedia
           component="img"
           sx={{ width: 151 }}
-          // image={imgUrl}
-          image="https://firebasestorage.googleapis.com/v0/b/tpchatchat.appspot.com/o/IMG_5485.jpeg?alt=media&token=90247e73-63d6-4475-acb3-bd52f5ca2ead"
+          image={
+            props.imgUrl !== ""
+              ? props.imgUrl
+              : "https://firebasestorage.googleapis.com/v0/b/tpchatchat.appspot.com/o/IMG_5485.jpeg?alt=media&token=90247e73-63d6-4475-acb3-bd52f5ca2ead"
+          }
           alt="image"
         />
       </>

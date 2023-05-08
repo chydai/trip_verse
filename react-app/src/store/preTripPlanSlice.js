@@ -44,8 +44,6 @@ export const deletePlan = createAsyncThunk(
 export const updatePlan = createAsyncThunk(
   "preTripPlan/updatePlan",
   async (newPlan) => {
-    // console.log(newGroup)
-
     const response = await api.updatePlan(newPlan);
     return response.data;
   }
@@ -81,17 +79,14 @@ const preTripPlanSlice = createSlice({
         state.error = action.error.message;
       })
       .addCase(addNewPlan.pending, (state, action) => {
-        // console.log('addnewgroups pending')
         state.status = "loading";
       })
       .addCase(addNewPlan.fulfilled, (state, action) => {
-        // console.log('slice/addnewgroup', action.payload)
         state.status = "idle";
         const addDate = action.payload.date;
         const temp = state.planlist.find((group) => group.date === addDate);
         if (!temp) {
           state.planlist.push(action.payload);
-          // state.curPlan = action.payload
         }
       })
       .addCase(addNewPlan.rejected, (state, action) => {
