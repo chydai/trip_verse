@@ -97,8 +97,11 @@ const preTripPlanSlice = createSlice({
       .addCase(updatePlan.fulfilled, (state, action) => {
         const { _id, ...body } = action.payload;
         const exsitingPlan = state.planlist.find((plan) => plan._id === _id);
+        let index = state.planlist.findIndex(
+          (group) => group._id === action.payload
+        );
         if (exsitingPlan) {
-          exsitingPlan = action.payload;
+          state.planlist[index] = action.payload;
         }
       })
       .addCase(deletePlan.fulfilled, (state, action) => {
