@@ -104,12 +104,14 @@ const preTripPlaceSlice = createSlice({
         if (exsitingPlace) {
           exsitingPlace = action.payload;
         }
+        state.status = "idle";
       })
       .addCase(deletePlace.fulfilled, (state, action) => {
         let index = state.placelist.findIndex(
           (group) => group._id === action.payload
         );
         state.placelist.splice(index, 1);
+        state.status = "idle";
       })
       .addCase(fetchOnePlace.fulfilled, (state, action) => {
         state.curPlace = action.payload;
