@@ -1,14 +1,12 @@
-import { lazy } from 'react';
+import { lazy } from "react";
 
 // project imports
-import Loadable from 'ui-component/Loadable';
-import MainLayout from 'layout/MainLayout';
+import Loadable from "ui-component/Loadable";
 
-const GroupInfo = Loadable(lazy(() => import('views/group/groupinfo')));
-
+const GroupInfo = Loadable(lazy(() => import("views/group/groupinfo")));
 
 const GroupDetailRoutes = {
-  path: '/group-info',
+  path: "/group-info",
   element: <GroupInfo />,
 };
 

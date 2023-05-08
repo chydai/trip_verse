@@ -4,9 +4,9 @@ import { useParams } from "react-router";
 import { useSelector } from "react-redux";
 
 import { selectUserProfile } from "store/userSlice";
-import { selectAllChannels } from "store/channelSlice";
-import { selectAllGroups } from "store/groupSlice";
 import { getUser } from "api/user";
+import { getChannel } from "api/channel";
+import { fetchCurGroup } from "api/group";
 
 export default function MyChatComponent() {
   const chatboxEl = useRef();
@@ -15,43 +15,48 @@ export default function MyChatComponent() {
   // wait for TalkJS to load
   const [talkLoaded, markTalkLoaded] = useState(false);
   const [people, setPeople] = useState([]);
+  const [curChannel, setCurChannel] = useState({});
+  const [curGroup, setCurGroup] = useState({});
 
-  const groupList = useSelector(selectAllGroups);
-  const channelList = useSelector(selectAllChannels);
   const curUser = useSelector(selectUserProfile); // object
-
-  const curChannel =
-    params.channelid && channelList.find((cur) => cur._id === params.channelid); // object
-  const curGroup = groupList.find((cur) => cur._id === params.groupid);
 
   useEffect(() => {
     async function getPeople(peopleId) {
-      Promise.all(
-        peopleId.map((userId) =>
-          getUser(userId)
-            .then((response) => response.data)
-            .catch((error) => {
-              console.error(`Error retrieving user ${userId}: ${error}`);
-            })
+      peopleId &&
+        (await Promise.all(
+          peopleId.map((userId) =>
+            getUser(userId)
+              .then((response) => response.data)
+              .catch((error) => {
+                console.error(`Error retrieving user ${userId}: ${error}`);
+              })
+          )
         )
-      )
-        .then((userObjects) => {
-          const people = userObjects
-            .map(
-              (user) =>
-                user && {
-                  name: user.name,
-                  id: user._id,
-                  avatarUrl: user.avatarUrl,
-                }
-            )
-            .filter(Boolean);
-          setPeople(people); // objects
-        })
-        .catch((error) => {
-          console.error(`Error retrieving users: ${error}`);
-        });
+          .then((userObjects) => {
+            const people = userObjects
+              .map(
+                (user) =>
+                  user && {
+                    name: user.name,
+                    id: user._id,
+                    avatarUrl: user.avatarUrl,
+                  }
+              )
+              .filter(Boolean);
+            setPeople(people); // objects
+          })
+          .catch((error) => {
+            console.error(`Error retrieving users: ${error}`);
+          }));
     }
+
+    params.channelid &&
+      getChannel(params.channelid)
+        .then((e) => setCurChannel(e.data))
+        .catch((err) => console.log(err));
+    fetchCurGroup(params.groupid)
+      .then((e) => setCurGroup(e.data))
+      .catch((err) => console.log(err));
 
     getPeople(params.channelid ? curChannel.members : curGroup.members);
 
@@ -81,9 +86,11 @@ export default function MyChatComponent() {
         me: me,
       });
 
-      const conversation = session.getOrCreateConversation(params.channelid ? params.channelid : params.groupid);
+      const conversation = session.getOrCreateConversation(
+        params.channelid ? params.channelid : params.groupid
+      );
       conversation.setParticipant(me);
-      for(let i = 0; i < otherTalkUsers.length; i++)
+      for (let i = 0; i < otherTalkUsers.length; i++)
         conversation.setParticipant(otherTalkUsers[i]);
 
       const chatbox = session.createChatbox();
@@ -92,7 +99,7 @@ export default function MyChatComponent() {
 
       return () => session.destroy();
     }
-  }, [talkLoaded, curChannel, curGroup, params]);
+  }, [talkLoaded, params]);
 
-  return <div style={{ height: "100%" }} ref={chatboxEl} />;
+  return <div style={{ height: "100%", marginLeft: "0px" }} ref={chatboxEl} />;
 }

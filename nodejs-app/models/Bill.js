@@ -47,6 +47,7 @@ BillSchema.pre("save", { document: true, query: false }, async function (next) {
       const debtOfUser = await Debt.findOne({
         userId: this.payer,
         targetId: entry.user,
+        channelId: channel._id,
       });
       if (debtOfUser) {
         await debtOfUser.updateOne({ $inc: { balance: -entry.balance } });
@@ -63,6 +64,7 @@ BillSchema.pre("save", { document: true, query: false }, async function (next) {
       const debtOfTarget = await Debt.findOne({
         userId: entry.user,
         targetId: this.payer,
+        channelId: channel._id,
       });
       if (debtOfTarget) {
         await debtOfTarget.updateOne({ $inc: { balance: entry.balance } });
@@ -85,12 +87,16 @@ BillSchema.pre(
   "updateOne",
   { document: true, query: false },
   async function (next) {
+    const datePlan = await DatePlan.findById(this.datePlanId);
+    const channel = await Channel.findById(datePlan.channelId);
+
     await Promise.all(
       this.debt.map(async (entry) => {
         const debtOfUser = await Debt.findOneAndUpdate(
           {
             userId: this.payer,
             targetId: entry.user,
+            channelId: channel._id,
           },
           { $inc: { balance: entry.balance } },
           { new: true }
@@ -101,6 +107,7 @@ BillSchema.pre(
           {
             userId: entry.user,
             targetId: this.payer,
+            channelId: channel._id,
           },
           { $inc: { balance: -entry.balance } },
           { new: true }
@@ -129,6 +136,7 @@ BillSchema.post(
         const debtOfUser = await Debt.findOne({
           userId: bill.payer,
           targetId: entry.user,
+          channelId: channel._id,
         });
         if (debtOfUser) {
           await debtOfUser.updateOne({ $inc: { balance: -entry.balance } });
@@ -145,6 +153,7 @@ BillSchema.post(
         const debtOfTarget = await Debt.findOne({
           userId: entry.user,
           targetId: bill.payer,
+          channelId: channel._id,
         });
         if (debtOfTarget) {
           await debtOfTarget.updateOne({ $inc: { balance: entry.balance } });
@@ -166,12 +175,16 @@ BillSchema.pre(
   "deleteOne",
   { document: true, query: false },
   async function (next) {
+    const datePlan = await DatePlan.findById(this.datePlanId);
+    const channel = await Channel.findById(datePlan.channelId);
+
     await Promise.all(
       this.debt.map(async (entry) => {
         const debtOfUser = await Debt.findOneAndUpdate(
           {
             userId: this.payer,
             targetId: entry.user,
+            channelId: channel._id,
           },
           { $inc: { balance: entry.balance } },
           { new: true }
@@ -182,6 +195,7 @@ BillSchema.pre(
           {
             userId: entry.user,
             targetId: this.payer,
+            channelId: channel._id,
           },
           { $inc: { balance: -entry.balance } },
           { new: true }

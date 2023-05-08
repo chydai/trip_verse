@@ -1,4 +1,4 @@
-import { forwardRef, useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 // material-ui
@@ -55,11 +55,6 @@ const NavManageGroup = ({ item, level }) => {
       fontSize={level > 0 ? "inherit" : "medium"}
     />
   );
-
-  let itemTarget = "_self";
-  if (item.target) {
-    itemTarget = "_blank";
-  }
 
   const itemHandler = async (id, name) => {
     setOpen(!open);

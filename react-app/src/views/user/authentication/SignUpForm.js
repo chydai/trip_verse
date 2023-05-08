@@ -102,7 +102,8 @@ const SignUpForm = ({ ...others }) => {
             name: values.name,
             password: values.password,
             email: values.email,
-            avatarUrl: "https://firebasestorage.googleapis.com/v0/b/tpchatchat.appspot.com/o/a-ziyuan460.svg?alt=media&token=6b67b97a-ad4f-44df-8530-4d619a307c8c",
+            avatarUrl:
+              "https://firebasestorage.googleapis.com/v0/b/tpchatchat.appspot.com/o/a-ziyuan460.svg?alt=media&token=6b67b97a-ad4f-44df-8530-4d619a307c8c",
           };
 
           const loginUser = await dispatch(signUpUser(newUser));

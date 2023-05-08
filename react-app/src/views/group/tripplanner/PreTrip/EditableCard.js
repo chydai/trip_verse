@@ -3,18 +3,15 @@ import {
   Box,
   Card,
   CardContent,
-  CardActions,
   Typography,
   IconButton,
   TextField,
-  CardHeader,
   CardMedia,
 } from "@mui/material";
 import { Edit as EditIcon, Cancel as CancelIcon } from "@mui/icons-material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useTheme } from "@emotion/react";
-// import { planDeleted, planUpdated } from 'store/preTripPlanSlice';
 import { updatePlace, deletePlace } from "store/preTripPlaceSlice";
 import { useDispatch } from "react-redux";
 
@@ -24,7 +21,6 @@ function EditableCard(props) {
   const [title, setTitle] = useState(props.title);
   const [content, setContent] = useState(props.content);
   const dispatch = useDispatch();
-  console.log("in editable title:",title)
   const handleEditClick = () => {
     setIsEditing(true);
   };
@@ -37,7 +33,6 @@ function EditableCard(props) {
 
   const handleSaveClick = () => {
     setIsEditing(false);
-    // props.onSave({title, content});
     dispatch(updatePlace({ name: title, note: content, _id: props.placeId }));
   };
 
@@ -54,7 +49,6 @@ function EditableCard(props) {
   };
 
   return (
-
     <Card
       sx={{
         display: "flex",
@@ -80,11 +74,10 @@ function EditableCard(props) {
                 margin="normal"
                 label="Title"
                 value={title}
-               
                 onChange={handleTitleChange}
                 multiline
               />
-              
+
               <TextField
                 fullWidth
                 margin="normal"
@@ -168,7 +161,9 @@ function EditableCard(props) {
           <CardMedia
             component="img"
             sx={{ width: 151 }}
-            image={props.imgUrl? props.imgUrl: "https://picsum.photos/400/300"}
+            image={
+              props.imgUrl ? props.imgUrl : "https://picsum.photos/400/300"
+            }
             alt="places"
           />
         </>

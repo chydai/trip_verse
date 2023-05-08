@@ -2,7 +2,7 @@
 import { Grid, Button, Box } from "@mui/material";
 import AnimateButton from "ui-component/extended/AnimateButton";
 import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -11,18 +11,15 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { storage } from "../../../firebase_setup/firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
-//import { addNewGroup } from 'store/groupSlice';
 import { addNewPost } from "store/postSlice";
 
 const NewPostButton = () => {
   const [open, setOpen] = useState(false);
   const [postTitle, setPostTitle] = useState("");
   const [postText, setPostText] = useState("");
-  const allInputs = { imgUrl: [] };
   const [imageAsFile, setImageAsFile] = useState([]);
   const [imageAsUrl, setImageAsUrl] = useState([]);
   const [addRequestStatus, setAddRequestStatus] = useState("idle");
-  const curUser = useSelector((state) => state.users.currentUser);
   const dispatch = useDispatch();
   const canSave =
     [postTitle, postText, imageAsUrl].every(Boolean) &&
@@ -40,11 +37,10 @@ const NewPostButton = () => {
         content: postText,
         imgUrls: imageAsUrl,
       };
-      
+
       if (canSave) {
         try {
           setAddRequestStatus("pending");
-          console.log("this is body", newPost);
           await dispatch(addNewPost(newPost)).unwrap();
 
           setPostTitle("");
@@ -62,13 +58,11 @@ const NewPostButton = () => {
 
     const handleImageAsFile = (e) => {
       const files = e.target.files;
-      // setImageAsFile((imageFile) => image);
       setImageAsFile([...imageAsFile, ...files]);
     };
 
     const handleFireBaseUpload = (e) => {
       e.preventDefault();
-      console.log("start of upload", imageAsFile);
 
       if (imageAsFile.length === 0) {
         console.error("No images selected");
@@ -82,21 +76,6 @@ const NewPostButton = () => {
         );
       }
 
-      // const uploadTask = ref(storage, `/images/${imageAsFile.name}`);
-      // uploadBytes(uploadTask, imageAsFile)
-      //   .then((snapshot) => {
-      //     console.log("Uploaded a blob or file!");
-      //     // Get the image download URL
-      //     getDownloadURL(snapshot.ref).then((downloadURL) => {
-      //       console.log("File available at", downloadURL);
-      //       setImageAsUrl({ imgUrl: downloadURL });
-      //       // You can now use the downloadURL to display the uploaded image
-      //       // or store it in a database for later retrieval.
-      //     });
-      //   })
-      //   .catch((error) => {
-      //     console.error("Error uploading image:", error);
-      //   });
       // Loop through image files and upload each one
       const updatedUrls = [];
       imageAsFile.forEach((imageAsFile) => {
@@ -109,13 +88,10 @@ const NewPostButton = () => {
         const uploadTask = ref(storage, `/images/${imageAsFile.name}`);
         uploadBytes(uploadTask, imageAsFile)
           .then((snapshot) => {
-            console.log("Uploaded a blob or file!");
             // Get the image download URL
             getDownloadURL(snapshot.ref).then((downloadURL) => {
-              // console.log("File available at", downloadURL);
               updatedUrls.push(downloadURL);
               setImageAsUrl(updatedUrls);
-              // console.log("this is imageAsUrl", imageAsUrl);
               // You can now use the downloadURL to display the uploaded image
               // or store it in a database for later retrieval.
             });
@@ -125,14 +101,6 @@ const NewPostButton = () => {
           });
       });
     };
-
-    // const handleDelete = async () => {
-    //     try {
-    //         await dispatch(deleteCard({ deckid, cardid }))
-    //     } catch (err) {
-    //         console.error('Failed to delete card: ', err)
-    //     }
-    // }
 
     return (
       <Box display="flex" justifyContent="flex-end">
@@ -170,13 +138,6 @@ const NewPostButton = () => {
                   <Grid item xs={12}>
                     <Box display="flex" alignItems="center">
                       <Box mr={1}>
-                        {/* <TextField
-                          type="file"
-                          onChange={handleImageAsFile}
-                          variant="outlined"
-                          fullWidth
-                          multiple
-                        /> */}
                         <input
                           type="file"
                           onChange={handleImageAsFile}
@@ -191,6 +152,9 @@ const NewPostButton = () => {
                         >
                           Upload
                         </Button>
+                      </Box>
+                      <Box style={{ marginLeft: "10px" }}>
+                        You can upload multiple images.
                       </Box>
                     </Box>
                   </Grid>

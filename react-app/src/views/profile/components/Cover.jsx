@@ -1,28 +1,19 @@
-import { useRef, useState, useEffect } from 'react';
-import {
-  Badge,
-  Box,
-  Button,
-  HStack,
-  Image,
-  Text,
-} from '@chakra-ui/react';
-
+import { useRef, useState, useEffect } from "react";
+import { Box, Button, Image, Text } from "@chakra-ui/react";
 
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storage } from "firebase_setup/firebase";
-import { updateUser, selectUserProfile } from 'store/userSlice';
-import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router';
-import { getUser } from 'api/user';
+import { updateUser, selectUserProfile } from "store/userSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router";
+import { getUser } from "api/user";
 
 export default function Cover() {
-
   const dispatch = useDispatch();
   const curUser = useSelector(selectUserProfile);
   const curParams = useParams();
 
-  const [visitUser, setVisitUser] = useState(null)
+  const [visitUser, setVisitUser] = useState(null);
 
   const profileImage = useRef(null);
 
@@ -31,31 +22,24 @@ export default function Cover() {
   const [imageAsUrl, setImageAsUrl] = useState(allInputs);
 
   const handleFireBaseUpload = () => {
-    console.log("start of upload", imageAsFile);
     // async magic goes here...
     if (imageAsFile === "") {
-      console.error(
-        `not an image, the image file is a ${typeof imageAsFile}`
-      );
+      console.error(`not an image, the image file is a ${typeof imageAsFile}`);
       return;
     }
     const uploadTask = ref(storage, `/images/${imageAsFile.name}`);
     uploadBytes(uploadTask, imageAsFile)
       .then((snapshot) => {
-        console.log("Uploaded a blob or file!");
         // Get the image download URL
         return getDownloadURL(snapshot.ref);
       })
       .then((downloadURL) => {
-        console.log("File available at", downloadURL);
         setImageAsUrl({ imgUrl: downloadURL });
-        return downloadURL
+        return downloadURL;
       })
       .then((url) => {
         const updatedUser = { ...curUser, backgroundUrl: url };
-        // console.log('?url', url);
-        // console.log(updatedUser)
-        dispatch(updateUser(updatedUser))
+        dispatch(updateUser(updatedUser));
       })
       .catch((error) => {
         console.error("Error uploading image:", error);
@@ -63,7 +47,6 @@ export default function Cover() {
   };
 
   useEffect(() => {
-    // console.log(imageAsFile)
     if (imageAsFile && curUser._id === curParams.userid) {
       handleFireBaseUpload();
     }
@@ -73,12 +56,11 @@ export default function Cover() {
     if (curParams.userid !== curUser._id) {
       getUser(curParams.userid)
         .then((response) => {
-          // console.log('??')
-          setVisitUser(response.data)
+          setVisitUser(response.data);
         })
         .catch((error) => {
           console.error(`Error retrieving user ${error}`);
-        })
+        });
     }
   }, [curParams, curUser]);
 
@@ -92,28 +74,33 @@ export default function Cover() {
     if (selected) {
       setImageAsFile(selected);
     }
-
   };
-
 
   return (
     <Box h={60} overflow="hidden" position="relative">
-      {curUser._id === curParams.userid ?
-      <Image
-        w="full"
-        h="full"
-        objectFit="cover"
-        src={curUser.backgroundUrl ? curUser.backgroundUrl : '/img/cover.jpg'}
-        alt="Cover"
-      /> :
-      visitUser && 
-      <Image
-        w="full"
-        h="full"
-        objectFit="cover"
-        src={visitUser.backgroundUrl ? visitUser.backgroundUrl : '/img/cover.jpg'}
-        alt="Cover"
-      />}
+      {curUser._id === curParams.userid ? (
+        <Image
+          w="full"
+          h="full"
+          objectFit="cover"
+          src={curUser.backgroundUrl ? curUser.backgroundUrl : "/img/cover.jpg"}
+          alt="Cover"
+        />
+      ) : (
+        visitUser && (
+          <Image
+            w="full"
+            h="full"
+            objectFit="cover"
+            src={
+              visitUser.backgroundUrl
+                ? visitUser.backgroundUrl
+                : "/img/cover.jpg"
+            }
+            alt="Cover"
+          />
+        )
+      )}
       <Button
         onClick={openChooseImage}
         position="absolute"
@@ -129,8 +116,13 @@ export default function Cover() {
           />
         </svg>
         <Text ml={2}>Change Cover</Text>
-        <input ref={profileImage} type="file" onChange={changeProfileImage} hidden />
+        <input
+          ref={profileImage}
+          type="file"
+          onChange={changeProfileImage}
+          hidden
+        />
       </Button>
     </Box>
-  )
+  );
 }

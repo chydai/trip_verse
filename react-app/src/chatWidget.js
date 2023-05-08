@@ -15,8 +15,6 @@ function App() {
   }, []);
 
   const handleNewUserMessage = async (newMessage) => {
-    // console.log(`New message incoming! ${newMessage}`);
-
     const completion = await openai.createChatCompletion({
       model: "gpt-3.5-turbo",
       messages: [{ role: "user", content: newMessage }],

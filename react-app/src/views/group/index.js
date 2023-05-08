@@ -24,7 +24,6 @@ import TripPlan from "./tripplanner";
 import GroupInfo from "./groupinfo";
 import MapInfo from "./mapInfo";
 import MyChatComponent from "./talk";
-import { width } from "@mui/system";
 
 // styles
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
@@ -121,8 +120,7 @@ const GroupPage = () => {
         <Grid container spacing={5}>
           <Grid item xs={12}>
             <Grid container spacing={gridSpacing}>
-
-              <Grid item xs={12} md={5} style={{ height: "623.5px"}}>
+              <Grid item xs={12} md={5} style={{ height: "623.5px" }}>
                 <MyChatComponent />
               </Grid>
 
@@ -132,7 +130,17 @@ const GroupPage = () => {
               </Grid>
             </Grid>
           </Grid>
-          <Grid item xs={12} md={12}>
+          <Grid
+            item
+            xs={12}
+            md={12}
+            style={{
+              paddingTop: "0",
+              marginTop: "-45px",
+              marginLeft: "20px",
+              width: "99.2%",
+            }}
+          >
             <MapInfo />
           </Grid>
         </Grid>

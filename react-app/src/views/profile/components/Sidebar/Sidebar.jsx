@@ -1,7 +1,7 @@
-import { Box } from '@chakra-ui/react'
+import { Box } from "@chakra-ui/react";
 
-import Data from './Data'
-import Profile from './Profile'
+import Data from "./Data";
+import Profile from "./Profile";
 
 function Sidebar() {
   return (
@@ -14,12 +14,12 @@ function Sidebar() {
       rounded="md"
       borderWidth={1}
       borderColor="brand.light"
-      style={{ transform: 'translateY(-100px)' }}
+      style={{ transform: "translateY(-100px)" }}
     >
       <Profile />
       <Data />
     </Box>
-  )
+  );
 }
 
-export default Sidebar
+export default Sidebar;

@@ -1,39 +1,35 @@
-import { Grid, Link } from '@mui/material';
-import MuiTypography from '@mui/material/Typography';
-import { useTheme } from '@mui/material/styles';
-import React, { useEffect, useMemo, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router';
+import { Grid } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
+import React, { useMemo, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router";
 
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import Card from '@mui/material/Card';
-import CardHeader from '@mui/material/CardHeader';
-import CardMedia from '@mui/material/CardMedia';
-import CardContent from '@mui/material/CardContent';
-import { Alert, CardActionArea, CardActions } from '@mui/material';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import ShareIcon from '@mui/icons-material/Share';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import GroupIcon from '@mui/icons-material/Group';
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import Card from "@mui/material/Card";
+import CardHeader from "@mui/material/CardHeader";
+import CardMedia from "@mui/material/CardMedia";
+import CardContent from "@mui/material/CardContent";
+import { Alert, CardActionArea, CardActions } from "@mui/material";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import GroupIcon from "@mui/icons-material/Group";
 
-import { setChatId } from 'store/chatSlice';
+import { setChatId } from "store/chatSlice";
 
-import { red, blue, orange } from '@mui/material/colors';
-
+import { red, blue } from "@mui/material/colors";
 
 import {
   deleteMyGroup,
   joinGroup,
   exitGroup,
   likeGroup,
-  dislikeGroup
-} from 'store/groupSlice';
+  dislikeGroup,
+} from "store/groupSlice";
 
 const SingleGroup = (prop) => {
-  // const group = prop.group;
   const theme = useTheme();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -41,7 +37,7 @@ const SingleGroup = (prop) => {
   const [group, setUpdateGroup] = useState(prop.group);
   const [anchorEl, setAnchorEl] = useState(null);
   const [showAlert, setShowAlert] = useState(-1);
-  const [errMsg, setErrMsg] = useState('');
+  const [errMsg, setErrMsg] = useState("");
 
   const dateObj = new Date(group.createdAt);
   const displayCreateDate = dateObj.toLocaleString();
@@ -60,11 +56,9 @@ const SingleGroup = (prop) => {
   const isGroupLiked = useMemo(
     () => group?.likes?.includes(user?.currentUser?._id),
     [user, group]
-  )
+  );
 
-  const [isLike, setIsLike] = useState(isGroupLiked)
-
-
+  const [isLike, setIsLike] = useState(isGroupLiked);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -74,7 +68,7 @@ const SingleGroup = (prop) => {
     setAnchorEl(null);
   };
 
-  const handleClickItem = (event, route = '') => {
+  const handleClickItem = (event, route = "") => {
     handleClose();
 
     const isJoined = (group?.members || []).includes(user?.currentUser?._id);
@@ -85,7 +79,6 @@ const SingleGroup = (prop) => {
     } else if (route) {
       navigate(route);
       dispatch(setChatId(groupID));
-
     }
   };
 
@@ -106,48 +99,44 @@ const SingleGroup = (prop) => {
   };
 
   const handleExitClick = async () => {
-    const res = await dispatch(exitGroup(group._id))
+    const res = await dispatch(exitGroup(group._id));
     if (res?.error) {
-      setShowAlert(3)
-      setErrMsg(res.error.message)
+      setShowAlert(3);
+      setErrMsg(res.error.message);
     } else {
       setShowAlert(2);
       if (res?.payload) {
         setUpdateGroup(res.payload);
       }
     }
-  }
+  };
 
   const handleLikeClick = async () => {
-    if (!isLike){
-    dispatch(likeGroup(group._id)).then((response) =>
-     {
-      setIsLike(true)
-      setUpdateGroup(response.payload);
+    if (!isLike) {
+      dispatch(likeGroup(group._id)).then((response) => {
+        setIsLike(true);
+        setUpdateGroup(response.payload);
+      });
+    } else {
+      dispatch(dislikeGroup(group._id)).then((response) => {
+        setIsLike(false);
+        setUpdateGroup(response.payload);
+      });
     }
-    )} else {
-      dispatch(dislikeGroup(group._id)).then((response) =>
-     {
-      setIsLike(false)
-      setUpdateGroup(response.payload);
-    }
-    )
-    }
-    
-  }
+  };
 
   return (
     <Grid item key={group._id} xs={12} sm={6} md={6} lg={4}>
       <Card
         sx={{
-          border: '2px solid',
+          border: "2px solid",
           borderColor: theme.palette.primary.light,
-          ':hover': {
-            boxShadow: '0 4px 14px 0 rgb(32 40 45 / 8%)',
+          ":hover": {
+            boxShadow: "0 4px 14px 0 rgb(32 40 45 / 8%)",
           },
-          height: '100%',
-          display: 'flex',
-          flexDirection: 'column',
+          height: "100%",
+          display: "flex",
+          flexDirection: "column",
         }}
       >
         <CardHeader
@@ -164,20 +153,14 @@ const SingleGroup = (prop) => {
                 onClose={handleClose}
                 variant="selectedMenu"
                 anchorOrigin={{
-                  vertical: 'bottom',
-                  horizontal: 'right',
+                  vertical: "bottom",
+                  horizontal: "right",
                 }}
                 transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
+                  vertical: "top",
+                  horizontal: "right",
                 }}
               >
-                {/* {isGroupOwner && (
-                  <MenuItem onClick={handleTranferClick}>
-                    Transfer Group
-                  </MenuItem>
-                )} */}
-
                 {!isGroupOwner && isGroupMember && (
                   <MenuItem onClick={handleExitClick}>Exit Group</MenuItem>
                 )}
@@ -203,11 +186,12 @@ const SingleGroup = (prop) => {
           <CardMedia
             component="img"
             height="130"
-            // image="https://picsum.photos/400/300"
-            image={group.imgUrl? group.imgUrl : "https://picsum.photos/400/300"}
+            image={
+              group.imgUrl ? group.imgUrl : "https://picsum.photos/400/300"
+            }
             alt="Boston"
           />
-          <CardContent sx={{ marginY: '0px', flexGrow: 1 }}>
+          <CardContent sx={{ marginY: "0px", flexGrow: 1 }}>
             <Typography variant="body2" color="text.secondary">
               {group.description}
             </Typography>
@@ -239,19 +223,38 @@ const SingleGroup = (prop) => {
         )}
         <CardActions disableSpacing sx={{ mt: 0, pt: 0 }}>
           <IconButton aria-label="add to favorites" onClick={handleLikeClick}>
-            <FavoriteIcon sx={{ color: isLike ? red[700] : 'default'}}/>
-            <Typography variant="button" sx={{ color: isLike ? red[700]: 'default'}}>{group.likes.length}</Typography>
+            <FavoriteIcon sx={{ color: isLike ? red[700] : "default" }} />
+            <Typography
+              variant="button"
+              sx={{ color: isLike ? red[700] : "default" }}
+            >
+              {group.likes.length}
+            </Typography>
           </IconButton>
 
-          
           <IconButton aria-label="group size" disabled>
-            <GroupIcon sx={{ color: isGroupOwner ?  blue[700] : isGroupMember? '#7e57c2' : 'gray'}}/>
-            <Typography variant="button"  sx={{ color: isGroupOwner ?  blue[700] : isGroupMember? '#7e57c2' : 'gray'}} >{group.members.length}</Typography>
+            <GroupIcon
+              sx={{
+                color: isGroupOwner
+                  ? blue[700]
+                  : isGroupMember
+                  ? "#7e57c2"
+                  : "gray",
+              }}
+            />
+            <Typography
+              variant="button"
+              sx={{
+                color: isGroupOwner
+                  ? blue[700]
+                  : isGroupMember
+                  ? "#7e57c2"
+                  : "gray",
+              }}
+            >
+              {group.members.length}
+            </Typography>
           </IconButton>
-
-          {/* <IconButton aria-label="share">
-            <ShareIcon />
-          </IconButton> */}
         </CardActions>
       </Card>
     </Grid>

@@ -8,10 +8,7 @@ import Map from "./Map";
 const MapInfo = () => {
   return (
     <MainCard title="Map">
-      <Map
-        center={{ lat: 39.2904, lng: -76.6122 }}
-        zoom={18}
-      />
+      <Map />
     </MainCard>
   );
 };

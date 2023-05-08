@@ -1,33 +1,16 @@
 import React from "react";
-import { useEffect, useState, useCallback } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  TextField,
-  Dialog,
-  Select,
-  MenuItem,
-  Button,
-  ButtonGroup,
-  Card,
-  AppBar,
-  Box,
-  CssBaseline,
-  Grid,
-  Toolbar,
-  Typography,
-  Icon,
-  IconButton,
-  CardContent,
-} from "@mui/material";
-import { styled, useTheme } from "@mui/material/styles";
-import AutorenewIcon from "@mui/icons-material/Autorenew";
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { Card, Box, Grid, Typography, CardContent } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import { gridSpacing } from "store/constant";
 import { useParams } from "react-router";
 import TripCard from "./TripCard";
-import { fetchAllPlan, selectAllPlans } from "store/preTripPlanSlice";
-import { fetchAllPlace, selectAllPlaces } from "store/preTripPlaceSlice";
+import { fetchAllPlan } from "store/preTripPlanSlice";
+import { planCleared } from "store/preTripPlaceSlice";
 import axios from "axios";
+
 axios.defaults.withCredentials = true;
 
 const SummaryCard = () => {
@@ -37,27 +20,32 @@ const SummaryCard = () => {
   const channelId = curRoute.channelid;
   const [combinedPlaces, setCombinedPlaces] = useState([]);
 
-  const plans = useSelector(selectAllPlans);
-  const planIds = plans.map((plan) => plan._id);
-
   const url = process.env.REACT_APP_BASE_URL + "/place";
 
   useEffect(() => {
     const fetchPlaces = async (planId) => {
       const response = await axios.get(`${url}/all/${planId}`);
-      // console.log("fetchPlaces", response.data);
       return response.data;
     };
 
-    const getCombinedPlaces = async () => {
+    const getCombinedPlaces = async (planIds) => {
       const promises = planIds.map((planId) => fetchPlaces(planId));
       const places = await Promise.all(promises);
       setCombinedPlaces(places.flat());
-      console.log("combinedPlaces", combinedPlaces);
     };
 
-    getCombinedPlaces();
-  }, []);
+    if (channelId) {
+      dispatch(planCleared()); // clear all places list in cur plan
+      dispatch(fetchAllPlan(channelId))
+        .then((newPlan) => {
+          const planIds = newPlan.payload.map((plan) => plan._id);
+          return planIds;
+        })
+        .then((planIds) => {
+          getCombinedPlaces(planIds);
+        });
+    }
+  }, [channelId, dispatch]);
 
   return (
     <Box>
