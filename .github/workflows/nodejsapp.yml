@@ -1,0 +1,20 @@
+name: Continuous Deployment for backend
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - dev
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: akhileshns/heroku-deploy@v3.12.13 # This is the action
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: "sp23-oose-project-team-12" #Must be unique in Heroku
+          heroku_email: "chydai.p@gmail.com"
+          buildpack: "https://github.com/timanovsky/subdir-heroku-buildpack.git"

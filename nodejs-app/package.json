@@ -1,0 +1,39 @@
+{
+  "name": "nodejs-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "serve": "npm run dev && firebase serve --only functions",
+    "shell": "npm run dev && firebase functions:shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "author": "",
+  "keywords": [],
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "firebase": "^9.17.2",
+    "firebase-admin": "^11.5.0",
+    "firestore": "^1.1.6",
+    "jsonwebtoken": "^9.0.0",
+    "mongodb-memory-server": "^8.12.1",
+    "mongoose": "^6.9.1",
+    "nodemon": "^2.0.20",
+    "react-firebase-hooks": "^5.1.1"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "jest": "^29.4.3",
+    "supertest": "^6.3.3"
+  }
+}

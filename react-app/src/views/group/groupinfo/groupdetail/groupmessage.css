@@ -1,0 +1,78 @@
+
+h1{
+  font-size: 10px;
+  width: 30%;
+  text-align: center;
+  border: none;
+  margin: 0 0 5px;
+  color:#9a86f3;
+  padding-bottom: 2px;
+  
+}
+.inputbox{
+  display: flex;
+  flex-direction: column;
+  max-width: max-content;
+  width: 100%;
+  background-color: #f0ecfc;
+  border-radius: 20px;
+  block-size: auto;
+  padding: 20px 15px;
+  font-family: "Times New Roman";  
+  font-size: 30px;
+  font-weight: bolder;
+  margin-top: 0;
+  height: 72vh;
+}
+
+input[type=text], select {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: none;
+  border-radius: 20px;
+  box-sizing: border-box;
+  font-size: 20px;
+
+}
+button[type=Gbutton] {
+  width: 40%;
+  background-color: #ffffff;
+  color: #9a86f3;
+  border-radius: 20px;
+  padding: 10px 40px;
+  margin: 20px 36px 8px 6px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-family: "Times New Roman";
+  font-size: 20px;
+  font-weight: bold;
+
+}
+.name,.list{  
+  border: none;
+  border-radius: 5px;
+  width: max-content;
+  align-items: center;
+  background-color: bisque;
+  font-size: 50px;
+  font-family: "Times New Roman";
+  margin-bottom: 0;
+  padding: 0;
+font-weight: bolder;}
+.list{
+  font-size: 45px;
+  margin-top: 0;
+}
+
+/* .displayform{
+  padding: 0;
+} */
+
+
+  form,label{
+    font-size: 20px;
+    color:#9a86f3;
+  }

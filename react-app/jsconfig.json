@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "jsx": "react",
+        "jsx": "react",
+        "target": "esnext",
+        "module": "commonjs",
+        "baseUrl": "src"
+    },
+    "include": [
+        "src/**/*", 
+        "tests/NewGroupButton.test.js", "../nodejs-app/firebase.js", "../nodejs-app/firebase.js"    ],
+    "exclude": [
+        "node_modules"
+    ]
+}

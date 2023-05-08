@@ -1,0 +1,28 @@
+name: CI Testing
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - dev
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install dependencies
+        run: |
+          cd react-app
+          npm i --force
+          cd ..
+          cd nodejs-app
+          npm i
+          cd ..
+      - name: CI checks for frontend
+        working-directory: react-app/src/tests
+        run: npm run test
+      - name: CI checks for backend
+        working-directory: nodejs-app/tests
+        run: npm run test
