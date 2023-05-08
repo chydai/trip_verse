@@ -48,8 +48,8 @@ function Map() {
       const response = await axios.get(`${url}/all/${planId}`);
       return response.data;
     };
-
-    if (channelId && placeStatus == 'idle') {
+    console.log(placeStatus)
+    if (channelId) {
       dispatch(fetchAllPlan(channelId))
         .then((newPlan) => {
           const planIds = newPlan.payload.map((plan) => plan._id);
