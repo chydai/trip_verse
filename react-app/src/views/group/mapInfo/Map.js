@@ -11,6 +11,7 @@ import { useParams } from "react-router";
 import { fetchAllPlan } from "store/preTripPlanSlice";
 import { planCleared } from "store/preTripPlaceSlice";
 import axios from "axios";
+import { useSelector } from "react-redux";
 
 const containerStyle = {
   width: "2050px",
@@ -33,10 +34,14 @@ function Map() {
 
   const dispatch = useDispatch();
   const [markers, setMarkers] = useState([]);
+  const [placeList, setPlaceList] = useState([]);
 
   const curRoute = useParams();
   const channelId = curRoute.channelid;
   const url = process.env.REACT_APP_BASE_URL + "/place";
+
+  const placeStatus = useSelector((state) => state.preTripPlace.status);
+
 
   useEffect(() => {
     const fetchPlaces = async (planId) => {
@@ -44,55 +49,58 @@ function Map() {
       return response.data;
     };
 
-    if (channelId) {
-      dispatch(planCleared()); // clear all places list in cur plan
+    if (channelId && placeStatus == 'idle') {
       dispatch(fetchAllPlan(channelId))
         .then((newPlan) => {
           const planIds = newPlan.payload.map((plan) => plan._id);
           return planIds;
         })
-        .then((planIds) => {
+        .then(async (planIds) => {
           const promises = planIds.map((planId) => fetchPlaces(planId));
-          const places = Promise.all(promises);
-          return places;
+          const places = await Promise.all(promises);
+          console.log(places.flat())
+          setPlaceList(places.flat())
         })
-        .then((placeList) => {
-          if (placeList.length > 0 && window.google && isLoaded) {
-            const geocoder = new window.google.maps.Geocoder();
+    }
+  }, [channelId, dispatch, placeStatus]);
 
-            Promise.all(
-              placeList[0].map((place) => {
-                return new Promise((resolve, reject) => {
-                  if (place.position) {
-                    resolve(place.position);
+  useEffect(() => {
+
+    if (placeList.length > 0 && window.google && isLoaded) {
+      const geocoder = new window.google.maps.Geocoder();
+      
+      Promise.all(
+        placeList.map((place) => {
+          // console.log(place)
+          return new Promise((resolve, reject) => {
+            if (place.position) {
+              resolve(place.position);
+            } else {
+              geocoder.geocode(
+                { address: place.name },
+                (results, status) => {
+                  if (status === "OK") {
+                    const { lat, lng } = results[0].geometry.location;
+                    const newPosition = { lat: lat(), lng: lng() };
+                    resolve(newPosition);
                   } else {
-                    geocoder.geocode(
-                      { address: place.name },
-                      (results, status) => {
-                        if (status === "OK") {
-                          const { lat, lng } = results[0].geometry.location;
-                          const newPosition = { lat: lat(), lng: lng() };
-                          resolve(newPosition);
-                        } else {
-                          console.error(
-                            "Geocode was not successful for the following reason: " +
-                              status
-                          );
-                        }
-                      }
+                    console.error(
+                      "Geocode was not successful for the following reason: " +
+                      status
                     );
                   }
-                });
-              })
-            ).then((newMarkers) => {
-              setMarkers(newMarkers);
-            });
-          } else {
-            setMarkers([]);
-          }
-        });
+                }
+              );
+            }
+          });
+        })
+      ).then((newMarkers) => {
+        setMarkers(newMarkers);
+      });
+    } else {
+      setMarkers([]);
     }
-  }, [channelId, isLoaded, dispatch, url]);
+  }, [placeList]);
 
   const autoCompleteRef = useRef(null);
 

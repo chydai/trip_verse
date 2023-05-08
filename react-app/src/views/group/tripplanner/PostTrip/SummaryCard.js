@@ -35,7 +35,6 @@ const SummaryCard = () => {
     };
 
     if (channelId) {
-      dispatch(planCleared()); // clear all places list in cur plan
       dispatch(fetchAllPlan(channelId))
         .then((newPlan) => {
           const planIds = newPlan.payload.map((plan) => plan._id);
