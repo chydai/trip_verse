@@ -57,7 +57,6 @@ function Map() {
         .then(async (planIds) => {
           const promises = planIds.map((planId) => fetchPlaces(planId));
           const places = await Promise.all(promises);
-          console.log(places.flat());
           setPlaceList(places.flat());
         });
     }

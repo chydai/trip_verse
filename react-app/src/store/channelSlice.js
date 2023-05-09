@@ -70,6 +70,14 @@ export const removeChannelMember = createAsyncThunk(
   }
 );
 
+export const quitChannel = createAsyncThunk(
+  "channels/quitChannel",
+  async (channelId) => {
+    const response = await api.quitChannel(channelId);
+    return response.data;
+  }
+);
+
 const channelSlice = createSlice({
   name: "channels",
   initialState,
@@ -129,6 +137,12 @@ const channelSlice = createSlice({
           (group) => group._id === action.payload._id
         );
         state.channelList[index] = action.payload;
+      })
+      .addCase(quitChannel.fulfilled, (state, action) => {
+        let index = state.channelList.findIndex(
+          (group) => group._id === action.payload._id
+        );
+        state.channelList.splice(index, 1);      
       });
   },
 });
