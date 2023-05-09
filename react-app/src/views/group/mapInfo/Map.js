@@ -48,7 +48,6 @@ function Map() {
       const response = await axios.get(`${url}/all/${planId}`);
       return response.data;
     };
-    console.log(placeStatus)
     if (channelId) {
       dispatch(fetchAllPlan(channelId))
         .then((newPlan) => {
@@ -80,7 +79,6 @@ function Map() {
                   const newPosition = { lat: lat(), lng: lng() };
                   resolve(newPosition);
                 } else if (status === "ZERO_RESULTS" ) {
-                  // console.log('??')
                   resolve();
                 } else {
                   console.error(
