@@ -154,7 +154,6 @@ const NewGroupButton = () => {
               onChange={(e) => setGroupName(e.target.value)}
             />
             <TextField
-              autoFocus
               margin="dense"
               label="Group Description"
               defaultValue={groupDescription}
@@ -163,18 +162,16 @@ const NewGroupButton = () => {
               onChange={(e) => setGroupDescription(e.target.value)}
             />
             <TextField
-              autoFocus
               margin="dense"
-              label="Where to GO?"
+              label="Where are you going?"
               defaultValue={groupDestination}
               fullWidth
               variant="outlined"
               onChange={(e) => setGroupDestination(e.target.value)}
             />
             <TextField
-              autoFocus
               margin="dense"
-              label="Where to Departure?"
+              label="Where are you leaving from?"
               defaultValue={groupOrigin}
               fullWidth
               variant="outlined"
