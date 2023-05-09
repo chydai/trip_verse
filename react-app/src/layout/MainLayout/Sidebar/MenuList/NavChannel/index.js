@@ -19,6 +19,7 @@ import {
 
 // project imports
 import { menuOpen, setMenu } from "store/customizationSlice";
+import QuitChannel from "./QuitChannel";
 import EditChannel from "./EditChannel";
 import DeleteChannel from "./DeleteChannel";
 import GetChannelId from "./GetChannelId";
@@ -182,13 +183,13 @@ const NavChannel = ({ item, level }) => {
           }}
         >
           <GetChannelId item={item} />
-          {isChannelOwner && (
+          {isChannelOwner? (
             <>
               <EditChannel item={item} />
               <DeleteChannel item={item} />
               <RemoveChannelMember item={item} />
-            </>
-          )}
+            </>)
+           : (<QuitChannel item={item}/>)}
           <Members item={item} />
         </List>
       </Collapse>

@@ -49,11 +49,16 @@ const Members = (props) => {
       )
     )
       .then((userObjects) => {
-        const people = userObjects.map((user) => ({
-          name: user.name,
-          id: user._id,
-          avatarUrl: user.avatarUrl,
-        }));
+        const people = userObjects
+        .map(
+          (user) =>
+            user && {
+              name: user.name,
+              id: user._id,
+              avatarUrl: user.avatarUrl,
+            }
+        )
+        .filter(Boolean);
         setPeople(people);
       })
       .catch((error) => {
