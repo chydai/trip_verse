@@ -282,9 +282,9 @@ const MySingleGroup = (prop) => {
             </Typography>
           </IconButton>
 
-          <IconButton aria-label="share" disabled>
+          {/* <IconButton aria-label="share" disabled>
             <ShareIcon sx={{ color: "gray" }} />
-          </IconButton>
+          </IconButton> */}
         </CardActions>
       </Card>
     </Grid>

@@ -9,7 +9,6 @@ import { addNewPlace } from "../../../store/preTripPlaceSlice";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router";
 import { fetchAllPlan } from "store/preTripPlanSlice";
-import { planCleared } from "store/preTripPlaceSlice";
 import axios from "axios";
 import { useSelector } from "react-redux";
 
@@ -18,11 +17,13 @@ const containerStyle = {
   height: "300px",
 };
 
+const libraries = ["places"];
+
 function Map() {
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
     googleMapsApiKey: "AIzaSyCbe2Jbk_pYrdl08f3R4cqka-25oj_kXBc",
-    libraries: ["places"],
+    libraries: libraries,
     language: "en",
   });
 
@@ -42,14 +43,12 @@ function Map() {
 
   const placeStatus = useSelector((state) => state.preTripPlace.status);
 
-
   useEffect(() => {
     const fetchPlaces = async (planId) => {
       const response = await axios.get(`${url}/all/${planId}`);
       return response.data;
     };
-
-    if (channelId && placeStatus == 'idle') {
+    if (channelId) {
       dispatch(fetchAllPlan(channelId))
         .then((newPlan) => {
           const planIds = newPlan.payload.map((plan) => plan._id);
@@ -58,39 +57,35 @@ function Map() {
         .then(async (planIds) => {
           const promises = planIds.map((planId) => fetchPlaces(planId));
           const places = await Promise.all(promises);
-          console.log(places.flat())
-          setPlaceList(places.flat())
-        })
+          setPlaceList(places.flat());
+        });
     }
   }, [channelId, dispatch, placeStatus]);
 
   useEffect(() => {
-
     if (placeList.length > 0 && window.google && isLoaded) {
       const geocoder = new window.google.maps.Geocoder();
-      
+
       Promise.all(
         placeList.map((place) => {
-          // console.log(place)
           return new Promise((resolve, reject) => {
             if (place.position) {
               resolve(place.position);
             } else {
-              geocoder.geocode(
-                { address: place.name },
-                (results, status) => {
-                  if (status === "OK") {
-                    const { lat, lng } = results[0].geometry.location;
-                    const newPosition = { lat: lat(), lng: lng() };
-                    resolve(newPosition);
-                  } else {
-                    console.error(
-                      "Geocode was not successful for the following reason: " +
+              geocoder.geocode({ address: place.name }, (results, status) => {
+                if (status === "OK" ) {
+                  const { lat, lng } = results[0].geometry.location;
+                  const newPosition = { lat: lat(), lng: lng() };
+                  resolve(newPosition);
+                } else if (status === "ZERO_RESULTS" ) {
+                  resolve();
+                } else {
+                  console.error(
+                    "Geocode was not successful for the following reason: " +
                       status
-                    );
-                  }
+                  );
                 }
-              );
+              });
             }
           });
         })

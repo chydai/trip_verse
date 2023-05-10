@@ -98,13 +98,23 @@ const preTripPlaceSlice = createSlice({
         state.status = "failed";
         state.error = action.error.message;
       })
+      .addCase(updatePlace.pending, (state, action) => {
+        state.status = "loading";
+      })
       .addCase(updatePlace.fulfilled, (state, action) => {
         const { _id, ...body } = action.payload;
         const exsitingPlace = state.placelist.find((plan) => plan._id === _id);
+        let index = state.placelist.findIndex(
+          (group) => group._id === action.payload
+        );
+        
         if (exsitingPlace) {
-          exsitingPlace = action.payload;
+          state.placelist[index] = action.payload
         }
         state.status = "idle";
+      })
+      .addCase(deletePlace.pending, (state, action) => {
+        state.status = "loading";
       })
       .addCase(deletePlace.fulfilled, (state, action) => {
         let index = state.placelist.findIndex(
