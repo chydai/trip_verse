@@ -32,6 +32,7 @@ const persistConfig = {
   key: "root",
   version: 1,
   storage,
+  expire: 24 * 60 * 60 * 1000,
   whitelist: ["users"],
 };
 
@@ -60,12 +61,10 @@ const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({
   reducer: persistedReducer,
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-      serializableCheck: {
-        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-      },
-    }),
 });
 
 export const persistor = persistStore(store);
+
+setTimeout(() => {
+  persistor.purge().then(() => store.dispatch({ type: "users/logout" })); // Clears the persisted state
+}, 24 * 60 * 60 * 1000 ); // Clears the persisted state after 60 seconds
